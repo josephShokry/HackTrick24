@@ -159,7 +159,7 @@ def decode(encoded: np.array) -> str:
     return steg.decode_text()
 
 if __name__=="__main__":
-    filepath = "Steganography/bananas background zoom.png"
+    filepath = "SteganoGAN\sample_example\encoded.png"
     image = imread(filepath)
-    encoded_np_image = encode(image, 'Welcom to HackTrick!!!!')
+    encoded_np_image = encode(np.array(image), 'Welcom to HackTrick!!!!')
     print(decode(encoded_np_image))

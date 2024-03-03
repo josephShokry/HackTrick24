@@ -1,7 +1,9 @@
 # Add the necessary imports here
+from math import factorial
 import pandas as pd
 import torch
 from utils import *
+import numpy as np
 
 
 def solve_cv_easy(test_case: tuple) -> list:
@@ -114,6 +116,18 @@ def solve_sec_hard(input:tuple)->str:
     return ''
 
 def solve_problem_solving_easy(input: tuple) -> list:
+    l = input[0]
+    x = input[1]
+    dic = {}
+
+    for ele in l:
+        if ele in dic:
+            dic[ele] += 1
+        else:
+            dic[ele] = 1
+    sorted_dict = dict(sorted(dic.items(), key=lambda x: (-x[1], x[0])))
+    first_x_elements = {key: sorted_dict[key] for key in list(sorted_dict)[:x]}
+    result = list(first_x_elements.keys())
     """
     This function takes a tuple as input and returns a list as output.
 
@@ -125,7 +139,7 @@ def solve_problem_solving_easy(input: tuple) -> list:
     Returns:
     list: A list of strings representing the solution to the problem.
     """
-    return []
+    return result
 
 
 def solve_problem_solving_medium(input: str) -> str:
@@ -138,10 +152,28 @@ def solve_problem_solving_medium(input: str) -> str:
     Returns:
     str: A string representing the solution to the problem.
     """
-    return ''
+    input_string = input
+    stack = [] 
+    num = 0 
+    current_string = ''
+    for i in input_string:
+      if i.isdigit():
+        num = 10 * num + int(i)
+      elif i == "[":
+        stack.append((current_string, num))
+        current_string = ''
+        num = 0
+      elif i == "]":
+        previous_char , num_of_rept = stack.pop()
+        current_string = previous_char + num_of_rept * current_string
+      else:
+        current_string += i
+    return current_string
 
 
 def solve_problem_solving_hard(input: tuple) -> int:
+    m = input[0]
+    n = input[1]
     """
     This function takes a tuple as input and returns an integer as output.
 
@@ -151,7 +183,7 @@ def solve_problem_solving_hard(input: tuple) -> int:
     Returns:
     int: An integer representing the solution to the problem.
     """
-    return 0
+    return factorial(m+n-2) // factorial(m-1) // factorial(n-1)
 
 
 riddle_solvers = {
@@ -166,3 +198,9 @@ riddle_solvers = {
     'problem_solving_medium': solve_problem_solving_medium,
     'problem_solving_hard': solve_problem_solving_hard
 }
+
+if __name__=="__main__":
+    # res = solve_problem_solving_easy((["pharaoh","sphinx","pharaoh","pharaoh","nile","sphinx","pyramid","pharaoh","sphinx","sphinx"],3))
+    # res = solve_problem_solving_hard((3 , 2))
+    res = solve_problem_solving_medium("3[d1[e2[l]]]")
+    print(res)
